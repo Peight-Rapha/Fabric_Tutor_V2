@@ -93,6 +93,20 @@ Cada etapa deve incluir:
 - relação com a DP-700;
 - aprendizado esperado.
 
+## Repositório de arquivos Parquet
+
+Os arquivos Parquet devem ser carregados em um repositório Azure, preferencialmente uma conta de Storage com Azure Data Lake Storage Gen2 habilitado. O Microsoft Fabric deve consumir esses arquivos por meio de um Shortcut no OneLake, apontando para o caminho dos dados no Azure.
+
+Fluxo padrão:
+
+1. fazer upload dos arquivos Parquet para o Azure Storage/ADLS Gen2;
+2. organizar os arquivos em uma estrutura de pastas estável, por exemplo `raw/<fonte>/<entidade>/`;
+3. criar um Shortcut no Lakehouse do Fabric apontando para essa pasta do Azure;
+4. validar o acesso e o schema pelo Fabric antes de iniciar a ingestão ou transformação;
+5. registrar no estado do projeto a conta, o caminho, o tipo de autenticação e a data da última validação.
+
+O agente deve orientar o uso do Shortcut quando os dados permanecerem no Azure, evitando cópias desnecessárias para o OneLake. A etapa só deve ser considerada concluída depois que o usuário enviar a confirmação ou evidência de que os arquivos estão acessíveis pelo Shortcut.
+
 ## Ciclo de uma etapa
 
 ```text
@@ -320,4 +334,3 @@ Toda sessão deve terminar com:
 5. estado atualizado do projeto;
 6. próximo passo recomendado;
 7. nota diária proposta para aprovação.
-

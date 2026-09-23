@@ -66,6 +66,20 @@ Each step must include:
 - DP-700 connection;
 - expected learning.
 
+## Parquet file repository
+
+Parquet files must be uploaded to an Azure repository, preferably an Azure Storage account with Azure Data Lake Storage Gen2 enabled. Microsoft Fabric should consume these files through an OneLake Shortcut that points to the data path in Azure.
+
+Standard workflow:
+
+1. upload the Parquet files to Azure Storage/ADLS Gen2;
+2. organize the files in a stable folder structure, for example `raw/<source>/<entity>/`;
+3. create a Shortcut in the Fabric Lakehouse that points to the Azure folder;
+4. validate access and the schema in Fabric before starting ingestion or transformation;
+5. record the account, path, authentication type, and last validation date in the project state.
+
+The agent should recommend a Shortcut when the data remains in Azure, avoiding unnecessary copies into OneLake. The step is complete only after the user provides confirmation or evidence that the files are accessible through the Shortcut.
+
 The agent must never assume that a step was completed merely because instructions were provided.
 
 ## Step lifecycle
@@ -206,4 +220,3 @@ Every session should end with:
 5. updated project state;
 6. recommended next step;
 7. proposed daily learning note for approval.
-
